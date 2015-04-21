@@ -892,7 +892,7 @@ angular.module('myApp', []).factory('gameLogic', function () {
     function updateUI(params) {
       $scope.jsonState = angular.toJson(params.stateAfterMove, true);
       $scope.board = params.stateAfterMove.board;
-      $scope.typeExpected = params.move[1] && params.move[1].set && params.move[1].set.value ? params.move[1].set.value.pawn : 'A';
+      $scope.typeExpected = params.move && params.move[1] && params.move[1].set && params.move[1].set.value ? params.move[1].set.value.pawn : 'A';
 
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();

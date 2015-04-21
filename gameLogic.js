@@ -631,7 +631,6 @@ angular.module('myApp', []).factory('gameLogic', function () {
     var pawnDelta = move[3].set.value,
     pawnPosition = move[2].set.value;
 
-    console.log(move);
 //    var x = new Error();
 
  	try{

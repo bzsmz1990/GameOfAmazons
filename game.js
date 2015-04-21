@@ -99,7 +99,7 @@ angular.module('myApp')
     }
 
     //initialise the game using this function call to updateUI
-    updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
+    //updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
 
 
     $scope.cellClicked = function (row, col) {
@@ -165,7 +165,7 @@ angular.module('myApp')
     };
 
     gameService.setGame({
-      gameDeveloperEmail: "prakhar05@gmail.com",
+      gameDeveloperEmail: "hy821@nyu.edu",
       minNumberOfPlayers: 2,
       maxNumberOfPlayers: 2,
       exampleGame: gameLogic.getExampleGame(),

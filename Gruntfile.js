@@ -92,7 +92,6 @@ module.exports = function(grunt) {
             'game.css',
             'img/QB.png',
             'img/QW.png',
-            'img/stop.png',
             'img/rsz_tile3.jpg',
             'img/tile2.jpg'
           ],

@@ -1,6 +1,6 @@
-'use strinct';
-
 describe("In Game of the Amazons", function() {
+
+	'use strinct';
 
 	var gameOfAmazonsLogic;
 
@@ -597,15 +597,15 @@ it("Not providing correct parameters in move", function() {
 //         	history[i].stateBeforeMove,
 //         	history[i].move);
 //     	}
-// 
+//
 //     }
-// 
+//
 //   	it("getExampleGame returns a legal history of the first few moves of game", function() {
 //     	var exampleGame = gameOfAmazonsLogic.getExampleGame();
 //     	expect(exampleGame.length).toBe(5);
 //     	expectLegalHistory(exampleGame);
 //   	});
-// 
+//
 //   	it("getRiddles returns legal histories which describes some moves to play to win game", function() {
 //     var riddles = gameOfAmazonsLogic.getRiddles();
 //     expect(riddles.length).toBe(2);

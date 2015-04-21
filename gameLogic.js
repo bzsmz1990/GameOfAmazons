@@ -1,7 +1,5 @@
-'use strict';
-
-angular.module('myApp').service('gameLogic', function () {
-
+angular.module('myApp', []).factory('gameLogic', function () {
+  'use strict';
   function isEqual(object1, object2) {
     return angular.equals(object1, object2);
   }
@@ -117,8 +115,7 @@ angular.module('myApp').service('gameLogic', function () {
       		pawnPosition.col===stateBeforeMove.pawnDelta.col)
       		{
       			if((turnIndexBeforeMove.turnIndex===0 &&
-      				board[pawnPosition.row][pawnPosition.col]!=='A')
-      				||
+      				board[pawnPosition.row][pawnPosition.col]!=='A') ||
       				(turnIndexBeforeMove.turnIndex===1 &&
       				board[pawnPosition.row][pawnPosition.col]!=='B'))
       				{      //player has to shoot arrow from the same place
@@ -541,41 +538,44 @@ angular.module('myApp').service('gameLogic', function () {
   		var pos = pawnPosList[i];
   		for(j=pos.col+1;j<10;j+=1){
   			if(board[pos.row][j] === ''){
-  			var temp = {row:pos.row,col:j};
+  			temp = {row:pos.row,col:j};
   			pawnDelList[index].push(temp);} //East
   			else{break;}}
   		for(j=pos.col-1;j>=0;j-=1){
-  			if(board[pos.row][j] === ''){var temp = {row:pos.row,col:j};pawnDelList[index].push(temp);} //West
+  			if(board[pos.row][j] === ''){temp = {row:pos.row,col:j};pawnDelList[index].push(temp);} //West
   			else{break;}}
   		for(j=pos.row+1;j<10;j+=1){
-  			if(board[j][pos.col] === ''){var temp = {row:j,col:pos.col};pawnDelList[index].push(temp);} //south
+  			if(board[j][pos.col] === ''){temp = {row:j,col:pos.col};pawnDelList[index].push(temp);} //south
   			else{break;}}
   		for(j=pos.row-1;j>=0;j-=1){
-  			if(board[j][pos.col] === ''){var temp = {row:j,col:pos.col};pawnDelList[index].push(temp);} //north
+  			if(board[j][pos.col] === ''){temp = {row:j,col:pos.col};pawnDelList[index].push(temp);} //north
   			else{break;}}
 
   		var startRow=pos.row+1,startCol=pos.col+1;
   		while(startRow<10 && startCol<10){
   			if(board[startRow][startCol] === ''){
-  			var temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow+=1;startCol+=1;} //SE
+  			temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow+=1;startCol+=1;} //SE
   			else{break;}}
 
-  		startRow=pos.row+1,startCol=pos.col-1;
+  		startRow=pos.row+1;
+      startCol=pos.col-1;
   		while(startRow<10 && startCol>=0){
   			if(board[startRow][startCol] === ''){
-  			var temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow+=1;startCol-=1;} //SW
+  			temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow+=1;startCol-=1;} //SW
   			else{break;}}
 
-  		startRow=pos.row-1,startCol=pos.col+1;
+  		startRow=pos.row-1;
+      startCol=pos.col+1;
   		while(startRow>=0 && startCol<10){
-  			if(board[startRow][startCol] === ''){var temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);
+  			if(board[startRow][startCol] === ''){temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);
   			startRow-=1;startCol+=1;} //NE
   			else{break;}}
 
-  		startRow=pos.row-1,startCol=pos.col-1;
+  		startRow=pos.row-1;
+      startCol=pos.col-1;
   		while(startRow>=0 && startCol>=0){
   			if(board[startRow][startCol] === ''){
-  			var temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow-=1;startCol-=1;} //NW
+  			temp = {row:startRow,col:startCol};pawnDelList[index].push(temp);startRow-=1;startCol-=1;} //NW
   			else{break;}}
 
   		index+=1;
@@ -591,8 +591,9 @@ angular.module('myApp').service('gameLogic', function () {
             }
             pawnPosition = pawnPosList[pawnNumber-1];			    //get pawn Position of that pawn
   	        listLen = pawnDelList[pawnNumber].length;     //get length of array of that pawns possible moves
-            if (listLen !== 0)
+            if (listLen !== 0){
               break;
+            }
     }
 
     pawnDelNumber = Math.floor((Math.random()*listLen)); // generate a random number between 0 and length from prev step
@@ -655,14 +656,16 @@ angular.module('myApp').service('gameLogic', function () {
 	}
 	}
 
-  this.isMoveOk = isMoveOk;
-  this.createMove = createMove;
-  this.createComputerMove = createComputerMove;
-  this.getInitialBoard = getInitialBoard;
-  this.getExampleGame = getExampleGame;
-  this.getRiddles = getRiddles;
-  this.horizontalMoveCheck = horizontalMoveCheck;
-  this.verticalMoveCheck = verticalMoveCheck;
-  this.diagonalMoveCheck = diagonalMoveCheck;
+  return {
+    isMoveOk : isMoveOk,
+    createMove : createMove,
+    createComputerMove : createComputerMove,
+    getInitialBoard : getInitialBoard,
+    getExampleGame : getExampleGame,
+    getRiddles : getRiddles,
+    horizontalMoveCheck : horizontalMoveCheck,
+    verticalMoveCheck : verticalMoveCheck,
+    diagonalMoveCheck : diagonalMoveCheck,
+  };
 
 });

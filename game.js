@@ -1,20 +1,22 @@
-'use strict';
+angular.module('myApp')
+  .controller('Ctrl', ['$scope', '$log','$timeout', '$rootScope', 'gameService',
+    'stateService', 'gameLogic', 'resizeGameAreaService', function ($scope, $log,
+    $timeout, $rootScope, gameService, stateService, gameLogic, resizeGameAreaService) {
 
-angular.module('myApp',['ngDraggable'])
-  .controller('Ctrl', function (
-      $window, $scope, $log, $timeout,
-      gameService, gameLogic) {
-
-
+    'use strict';
+    resizeGameAreaService.setWidthToHeight(1);
+/*
+    var gameArea = document.getElementById('gameArea');
+    var NUM = 10; // num of rows and cols
+    var draggingStartedRowCol = null;
+    var draggingPiece = null;
+*/
     //Globals to detect 2 clicks then make move
     var pawnPosition = {row:'',col:''};
     var pawnDelta = {row:'',col:''};
     var lastSelected = {row:'', col:''};
     var movCtr = 2;
     var moveType = 2;
-
-    var sound = new Audio('audio/move2.mp3');
-    sound.load();
 
     function sendComputerMove() {
       gameService.makeMove(
@@ -33,10 +35,10 @@ angular.module('myApp',['ngDraggable'])
         $scope.cellClicked(rowData, colData);
       };
 
-     $scope.isPawn = function(row,col,pawn){
+    $scope.isPawn = function(row,col,pawn){
     	if($scope.board[row][col]===pawn){
     		return true;}
-    }
+    };
 
     $scope.isNotPawn = function(row,col){
       if($scope.board[row][col]==='A' ||
@@ -44,9 +46,10 @@ angular.module('myApp',['ngDraggable'])
         $scope.board[row][col]==='X'){
         return false;
       }
-      else
+      else {
         return true;
-    }
+      }
+    };
 
     $scope.isWTurn = function(){
     	if($scope.turnIndex===0){
@@ -55,7 +58,7 @@ angular.module('myApp',['ngDraggable'])
     	else{
     	return false;
     	}
-    }
+    };
 
     $scope.isSelected = function(row,col){
     	if(row===lastSelected.row && col===lastSelected.col){
@@ -66,7 +69,7 @@ angular.module('myApp',['ngDraggable'])
 //     		console.log('Found false');
     		return false;
     	}
-    }
+    };
 
     $scope.isBTurn = function(){
     	if($scope.turnIndex===1){
@@ -75,7 +78,7 @@ angular.module('myApp',['ngDraggable'])
     	else{
     	return false;
     	}
-    }
+    };
 
     function updateUI(params) {
       $scope.jsonState = angular.toJson(params.stateAfterMove, true);
@@ -83,18 +86,13 @@ angular.module('myApp',['ngDraggable'])
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
       }
-      else
-      {
-      	sound.play();
-      }
-
       $scope.isYourTurn = params.turnIndexAfterMove >= 0 && // game is ongoing
         params.yourPlayerIndex === params.turnIndexAfterMove; // it's my turn
       $scope.turnIndex = params.turnIndexAfterMove;
 
      // Is it the computer's turn?
-      if ($scope.isYourTurn
-          && params.playersInfo[params.yourPlayerIndex].playerId === '') {
+      if ($scope.isYourTurn &&
+          params.playersInfo[params.yourPlayerIndex].playerId === '') {
         // Wait 500 milliseconds until animation ends.
         $timeout(sendComputerMove, 1000);
       }
@@ -110,9 +108,9 @@ angular.module('myApp',['ngDraggable'])
         return;
       }
 
-      if ((($scope.board[row][col]==='A' && $scope.turnIndex===0) ||
-      	  	($scope.board[row][col]==='B' && $scope.turnIndex===1)) &&
-      	  	(movCtr===2)){
+      if (($scope.board[row][col]==='A' && $scope.turnIndex===0 ||
+      	  	$scope.board[row][col]==='B' && $scope.turnIndex===1) &&
+      	  	movCtr===2){
       	pawnPosition.row = row;
       	pawnPosition.col = col;
       	movCtr-=1;
@@ -153,7 +151,7 @@ angular.module('myApp',['ngDraggable'])
         	movCtr=1;
         	}else
         	{pawnPosition = {row:'',col:''};
-        	movCtr=2
+        	movCtr=2;
         	}
         	pawnDelta = {row:'',col:''};
         	gameService.makeMove(move);
@@ -166,8 +164,6 @@ angular.module('myApp',['ngDraggable'])
       }
     };
 
-//     scaleBodyService.scaleBody({width: 152, height: 152});
-
     gameService.setGame({
       gameDeveloperEmail: "prakhar05@gmail.com",
       minNumberOfPlayers: 2,
@@ -177,4 +173,4 @@ angular.module('myApp',['ngDraggable'])
       isMoveOk: gameLogic.isMoveOk,
       updateUI: updateUI
     });
-  });
+  }]);

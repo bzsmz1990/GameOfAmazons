@@ -1,6 +1,4 @@
 body {
-  margin: 0px;
-  padding: 0px;
   border:none;
   max-height: 100%;
 }
@@ -19,11 +17,15 @@ body {
 }
 
 .o {
-  background-image: url('img/rsz_tile3.jpg');
+  background: url('img/rsz_tile3.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .e {
-  background-image: url('img/tile2.jpg');
+  background: url('img/tile2.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .pawnW{

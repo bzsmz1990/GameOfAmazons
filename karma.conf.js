@@ -1,14 +1,12 @@
-'use strict';
 module.exports = function(config){
+  'use strict';
   config.set({
 
     basePath : './',
 
     files : [
-      '/Users/KillEmAll/Documents/components/angular/angular.js',
-      '/Users/KillEmAll/Documents/components/angular-route/angular-route.js',
-      '/Users/KillEmAll/Documents/components/angular-resource/angular-resource.js',
-      '/Users/KillEmAll/Documents/components/angular-mocks/angular-mocks.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-mocks.js',
       '*.js'
     ],
 
@@ -18,7 +16,7 @@ module.exports = function(config){
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      '/Users/KillEmAll/Documents/gameLogic.js': ['coverage']
+      'gameLogic.js': ['coverage']
     },
 
     // optionally, configure the reporter
@@ -28,7 +26,7 @@ module.exports = function(config){
     },
 
     autoWatch : true,
-    
+
     logLevel: config.LOG_DEBUG,
 
     frameworks: ['jasmine'],

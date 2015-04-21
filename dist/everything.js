@@ -695,7 +695,6 @@ angular.module('myApp', []).factory('gameLogic', function () {
 
       // Is outside gameArea?
       if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
-        $log.info(['drag out']);
         if (!draggingPiece) {
           return;
         }
@@ -711,7 +710,6 @@ angular.module('myApp', []).factory('gameLogic', function () {
         // Inside gameArea
         var col = Math.floor(NUM * x / gameArea.clientWidth);
         var row = Math.floor(NUM * y / gameArea.clientHeight);
-        $log.info(['current pos', x, y, row, col]);
 
         if (type === "touchstart" && !draggingStartedRowCol) {
           if ($scope.board[row][col] === $scope.typeExpected && $scope.isYourTurn && $scope.typeExpected !== 'X') {
@@ -735,7 +733,6 @@ angular.module('myApp', []).factory('gameLogic', function () {
           var topos = {row: row, col: col};
           dragDone(frompos, topos);
         } else {
-            $log.info(['Drag continue']);
             setDraggingPieceTopLeft(getSquareTopLeft(row, col), $scope.typeExpected);
         }
       }
@@ -756,23 +753,23 @@ angular.module('myApp', []).factory('gameLogic', function () {
 
     }
     window.handleDragEvent = handleDragEvent;
-/*
+
     function isInvalidPos(topLeft) {
       var size = getSquareWidthHeight();
       var row = Math.floor(topLeft.top / size.height);
       var col = Math.floor(topLeft.left / size.width);
-      return row < 0 || row > 9 || col < 0 || col > 9 || $scope.board[row][col] !== '';
+      return row >= 0 && row <= 9 && col >= 0 && col <= 9 && $scope.board[row][col] !== '';
     }
-*/
+
     function setDraggingPieceTopLeft(topLeft, mType) {
       var originalSize;
       var row = draggingStartedRowCol.row;
       var col = draggingStartedRowCol.col;
-/*
+
       if (isInvalidPos(topLeft)) {
         return;
       }
-*/
+
       originalSize = mType !== 'X' ? getSquareTopLeft(row, col) : getSquareTopLeft(0, 0);
       draggingPiece.style.left = topLeft.left - originalSize.left + 'px';
       draggingPiece.style.top = topLeft.top - originalSize.top + 'px';

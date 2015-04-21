@@ -1,16 +1,163 @@
 angular.module('myApp')
   .controller('Ctrl', ['$scope', '$log','$timeout', '$rootScope', 'gameService',
-    'stateService', 'gameLogic', 'resizeGameAreaService', function ($scope, $log,
-    $timeout, $rootScope, gameService, stateService, gameLogic, resizeGameAreaService) {
+    'gameLogic', 'resizeGameAreaService', function ($scope, $log,
+    $timeout, $rootScope, gameService, gameLogic, resizeGameAreaService) {
 
     'use strict';
     resizeGameAreaService.setWidthToHeight(1);
-/*
+
     var gameArea = document.getElementById('gameArea');
     var NUM = 10; // num of rows and cols
     var draggingStartedRowCol = null;
     var draggingPiece = null;
-*/
+    var nextZIndex = 61;
+
+    function handleDragEvent(type, clientX, clientY) {
+      $log.info([type]);
+      // Center point in gameArea
+      var x = clientX - gameArea.offsetLeft;
+      var y = clientY - gameArea.offsetTop;
+      var mType = moveType;
+      // Is outside gameArea?
+      if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
+        $log.info(['drag out']);
+        if (!draggingPiece) {
+          return;
+        }
+          // Drag the piece where the touch is (without snapping to a square).
+        var size = getSquareWidthHeight();
+        setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2}, mType);
+        if (type === "touchend"){
+          if (mType % 2 === 1) {
+            draggingPiece.style.display = 'none';
+          }
+        }
+      } else {
+        // Inside gameArea
+        var col = Math.floor(NUM * x / gameArea.clientWidth);
+        var row = Math.floor(NUM * y / gameArea.clientHeight);
+        $log.info([x, y, col, row]);
+
+        if (type === "touchstart" && !draggingStartedRowCol) {
+          if ($scope.board[row][col] === $scope.myPiece && $scope.isYourTurn && mType % 2 === 0) {
+            draggingStartedRowCol = {row: row, col: col};
+            draggingPiece = document.getElementById("piece"+$scope.myPiece+"_"+row+"x"+col);
+            draggingPiece.style['z-index'] = ++nextZIndex;
+          }else if ($scope.isYourTurn && mType % 2 === 1) {
+              draggingStartedRowCol = pawnDelta;
+              draggingPiece = document.getElementById("pieceX_drag");
+              setDraggingPieceTopLeft(getSquareTopLeft(row, col), mType);
+              draggingPiece.style['z-index'] = ++nextZIndex;
+              draggingPiece.style.display = 'inline';
+           }
+        }
+        if (!draggingPiece) {
+          return;
+        }
+
+        if (type === "touchend") {
+          var frompos = draggingStartedRowCol;
+          var topos = {row: row, col: col};
+          dragDone(frompos, topos);
+        } else {
+            $log.info(['Drag continue']);
+            setDraggingPieceTopLeft(getSquareTopLeft(row, col), mType);
+        }
+      }
+
+      if (type === "touchend" ||
+          type === "touchcancel" || type === "touchleave") {
+        // drag ended
+        // return the piece to it's original style (then angular will take care to hide it).
+        setDraggingPieceTopLeft(getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col), mType);
+        if (type !== 'touchend' && mType % 2 === 1) {
+          draggingPiece.style.display = 'none';
+        }
+        draggingStartedRowCol = null;
+        //draggingPiece.removeAttribute("style"); // trying out
+        draggingPiece = null;
+      }
+
+    }
+    window.handleDragEvent = handleDragEvent;
+
+    function isInvalidPos(topLeft) {
+      var size = getSquareWidthHeight();
+      var row = Math.floor(topLeft.top / size.height);
+      var col = Math.floor(topLeft.left / size.width);
+      return row < 0 || row > 9 || col < 0 || col > 9 || $scope.board[row][col] !== '';
+    }
+
+    function setDraggingPieceTopLeft(topLeft, mType) {
+      var originalSize;
+      var row = draggingStartedRowCol.row;
+      var col = draggingStartedRowCol.col;
+
+      $log.info(['set topleft', row, col, topLeft]);
+      if (isInvalidPos(topLeft)) {
+        return;
+      }
+
+      originalSize = mType % 2 === 0 ? getSquareTopLeft(row, col) : getSquareTopLeft(0, 0);
+      draggingPiece.style.left = topLeft.left - originalSize.left + 'px';
+      draggingPiece.style.top = topLeft.top - originalSize.top + 'px';
+    }
+
+    function getSquareWidthHeight() {
+      return {
+        width: gameArea.clientWidth / NUM,
+        height: gameArea.clientHeight / NUM
+      };
+    }
+
+    function getSquareTopLeft(row, col) {
+      var size = getSquareWidthHeight();
+      return {top: row * size.height, left: col * size.width};
+    }
+
+    function dragDone(frompos, topos) {
+      $rootScope.$apply(function() {
+        var msg = 'Dragged piece ' + frompos.row + 'x' + frompos.col + ' to square ' +
+          topos.row + 'x' + topos.col;
+        $log.info(msg);
+        $scope.msg = msg;
+
+        if (!$scope.isYourTurn) {
+          return;
+        }
+
+        try {
+          if (gameLogic.horizontalMoveCheck(frompos,topos,$scope.board)||
+            	gameLogic.verticalMoveCheck(frompos,topos,$scope.board)  ||
+            	gameLogic.diagonalMoveCheck(frompos,topos,$scope.board)) {
+                var move = gameLogic.createMove(frompos, topos, $scope.turnIndex, $scope.jsonState);
+                lastSelected = {row: topos.row, col: topos.col};
+                gameService.makeMove(move);
+                $scope.isYourTurn = false;
+                pawnDelta = topos;
+                if (moveType % 2 === 1) {
+                  draggingPiece.style.display = 'none';
+                }
+                moveType += 1;
+              }
+        } catch (e) {
+          $log.info(['Illegal Move ', frompos, topos]);
+        }
+      });
+    }
+
+    function getIntegersTill(number) {
+      var res = [];
+      for (var i = 0; i < number; i++) {
+        res.push(i);
+      }
+      return res;
+    }
+    $scope.rows = getIntegersTill(NUM);
+    $scope.cols = getIntegersTill(NUM);
+    $scope.rowsNum = NUM;
+    $scope.colsNum = NUM;
+
     //Globals to detect 2 clicks then make move
     var pawnPosition = {row:'',col:''};
     var pawnDelta = {row:'',col:''};
@@ -22,18 +169,6 @@ angular.module('myApp')
       gameService.makeMove(
           gameLogic.createComputerMove($scope.jsonState,$scope.turnIndex));
     }
-
-    $scope.onDropComplete = function (data, event, rowData, colData) {
-        $log.info("onDropComplete happened!", arguments);
-        $scope.notifications = "Dropped piece " + data + " in " + rowData + "x" + colData;
-        $scope.cellClicked(rowData, colData);
-      };
-
-    $scope.onDrag = function (data, event, rowData, colData) {
-        $log.info("drag happened!", arguments);
-        $scope.notifications = "Dragged " + data + " in " + rowData + "x" + colData;
-        $scope.cellClicked(rowData, colData);
-      };
 
     $scope.isPawn = function(row,col,pawn){
     	if($scope.board[row][col]===pawn){
@@ -83,16 +218,21 @@ angular.module('myApp')
     function updateUI(params) {
       $scope.jsonState = angular.toJson(params.stateAfterMove, true);
       $scope.board = params.stateAfterMove.board;
+      $scope.myPiece = params.yourPlayerIndex === 0 ? 'A' : 'B';
+      $scope.typeExpected = params.move.turnInfo ? params.move.turnInfo.pawn : 'A';
+
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
       }
       $scope.isYourTurn = params.turnIndexAfterMove >= 0 && // game is ongoing
-        params.yourPlayerIndex === params.turnIndexAfterMove; // it's my turn
+        params.yourPlayerIndex === params.turnIndexAfterMove &&
+        params.endMatchScores === null; // it's my turn
       $scope.turnIndex = params.turnIndexAfterMove;
 
      // Is it the computer's turn?
       if ($scope.isYourTurn &&
           params.playersInfo[params.yourPlayerIndex].playerId === '') {
+        $scope.isYourTurn = false;
         // Wait 500 milliseconds until animation ends.
         $timeout(sendComputerMove, 1000);
       }

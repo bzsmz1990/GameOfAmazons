@@ -85,15 +85,11 @@ module.exports = function(grunt) {
             'http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js',
             'http://yoav-zibin.github.io/emulator/dist/gameServices.min.js',
             'http://yoav-zibin.github.io/emulator/dist/dragAndDropListeners.min.js',
-            'http://yoav-zibin.github.io/emulator/angular-translate/angular-translate.2.6.1.min.js',
-            'languages/en.js',
             'http://yoav-zibin.github.io/emulator/main.css',
             'dist/everything.min.js',
             'game.css',
             'img/QB.png',
-            'img/QW.png',
-            'img/rsz_tile3.jpg',
-            'img/tile2.jpg'
+            'img/QW.png'
           ],
           network: ['dist/everything.min.js.map', 'dist/everything.js'],
           timestamp: true
@@ -136,6 +132,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint', 'karma',
       'concat', 'uglify',
       'processhtml', 'manifest',
-      'http-server', 'protractor']);
+      'http-server']);
 
 };

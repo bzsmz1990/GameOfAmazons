@@ -101,9 +101,13 @@ angular.module('myApp', []).factory('gameLogic', function () {
 
     var boardAfterMove = copyObject(board);
 
+    if (board[pawnDelta.row][pawnDelta.col] !== '') {
+      throw new Error("pawn must land in empty position");
+    }
+
 	if(turnInfo.ctr===2){
-      if(board[pawnPosition.row][pawnPosition.col]!==turnInfo.pawn){ //pawn has to exist at position
-        return false;
+      if(board[pawnPosition.row][pawnPosition.col]!==turnInfo.pawn){
+        throw new Error("pawn has to exist at position");
       }
       else{
         boardAfterMove[pawnPosition.row][pawnPosition.col] = '';
@@ -118,11 +122,13 @@ angular.module('myApp', []).factory('gameLogic', function () {
       				board[pawnPosition.row][pawnPosition.col]!=='A') ||
       				(turnIndexBeforeMove.turnIndex===1 &&
       				board[pawnPosition.row][pawnPosition.col]!=='B'))
-      				{      //player has to shoot arrow from the same place
-        				return false;
+      				{
+        				throw new Error("player has to shoot arrow from the same place");
         			}
       		}
-      else{return false;}
+      else{
+        throw new Error("Wrong position for shooting arrow");
+      }
     }
 
 

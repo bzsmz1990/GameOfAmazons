@@ -1,37 +1,20 @@
 .table {
   border-collapse: collapse;
   border : 4px solid #2B0E00;
-  padding: 0;
 }
 
 .o {
-  background: url('img/rsz_tile3.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
+  background-color: #b58863;
 }
 
 .e {
-  background: url('img/tile2.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.pawnWselect{
-    /*filter: opacity(100%);
-    -webkit-filter: opacity(100%);*/
-
+  background-color: #f0d9b5;
 }
 
 .pawnWselect:hover{
 	cursor:pointer;
   filter: opacity(30%);
   -webkit-filter: opacity(30%);
-
-}
-
-.pawnBselect{
-  /*filter: opacity(100%);
-  -webkit-filter: opacity(100%);*/
 
 }
 

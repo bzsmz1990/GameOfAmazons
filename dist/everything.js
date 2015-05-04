@@ -676,8 +676,9 @@ angular.module('myApp', []).factory('gameLogic', function () {
 });
 ;angular.module('myApp')
   .controller('Ctrl', ['$scope', '$log','$timeout', '$rootScope', 'gameService',
-    'gameLogic', 'resizeGameAreaService', function ($scope, $log,
-    $timeout, $rootScope, gameService, gameLogic, resizeGameAreaService) {
+    'gameLogic', 'resizeGameAreaService', 'dragAndDropService',
+    function ($scope, $log, $timeout, $rootScope, gameService,
+      gameLogic, resizeGameAreaService, dragAndDropService) {
 
     'use strict';
     resizeGameAreaService.setWidthToHeight(1);
@@ -752,7 +753,7 @@ angular.module('myApp', []).factory('gameLogic', function () {
       }
 
     }
-    window.handleDragEvent = handleDragEvent;
+    dragAndDropService.addDragListener("gameArea", handleDragEvent);
 
     function isInvalidPos(topLeft) {
       var size = getSquareWidthHeight();

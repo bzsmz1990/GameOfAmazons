@@ -1,10 +1,11 @@
 angular.module('myApp')
   .controller('Ctrl', ['$scope', '$log','$timeout', '$rootScope', 'gameService',
-    'gameLogic', 'resizeGameAreaService', 'dragAndDropService',
+    'gameLogic', 'resizeGameAreaService', 'dragAndDropService', '$translate',
     function ($scope, $log, $timeout, $rootScope, gameService,
-      gameLogic, resizeGameAreaService, dragAndDropService) {
+      gameLogic, resizeGameAreaService, dragAndDropService, $translate) {
 
     'use strict';
+    console.log('Translation of RULES_OF_AMAZONS is ' + $translate('RULES_OF_AMAZONS'));
     resizeGameAreaService.setWidthToHeight(1);
 
     var gameArea = document.getElementById('gameArea');

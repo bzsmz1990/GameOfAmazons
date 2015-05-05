@@ -1,4 +1,4 @@
-angular.module('myApp', []).factory('gameLogic', function () {
+angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', function () {
   'use strict';
   function isEqual(object1, object2) {
     return angular.equals(object1, object2);

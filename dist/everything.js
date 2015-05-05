@@ -1,4 +1,4 @@
-angular.module('myApp', []).factory('gameLogic', function () {
+angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', function () {
   'use strict';
   function isEqual(object1, object2) {
     return angular.equals(object1, object2);
@@ -676,11 +676,12 @@ angular.module('myApp', []).factory('gameLogic', function () {
 });
 ;angular.module('myApp')
   .controller('Ctrl', ['$scope', '$log','$timeout', '$rootScope', 'gameService',
-    'gameLogic', 'resizeGameAreaService', 'dragAndDropService',
+    'gameLogic', 'resizeGameAreaService', 'dragAndDropService', '$translate',
     function ($scope, $log, $timeout, $rootScope, gameService,
-      gameLogic, resizeGameAreaService, dragAndDropService) {
+      gameLogic, resizeGameAreaService, dragAndDropService, $translate) {
 
     'use strict';
+    console.log('Translation of RULES_OF_AMAZONS is ' + $translate('RULES_OF_AMAZONS'));
     resizeGameAreaService.setWidthToHeight(1);
 
     var gameArea = document.getElementById('gameArea');

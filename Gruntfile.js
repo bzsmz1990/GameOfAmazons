@@ -93,9 +93,17 @@ module.exports = function(grunt) {
             'dist/everything.min.js',
             'game.css',
             'imgs/QB.png',
-            'imgs/QW.png'
+            'imgs/QW.png',
+            'imgs/HelpSlide0.png',
+            'imgs/HelpSlide1.png',
+            'imgs/HelpSlide2.png'
           ],
-          network: ['dist/everything.min.js.map', 'dist/everything.js'],
+          network: [
+            'languages/en.js',
+            'languages/zh.js',
+            'dist/everything.min.js.map',
+            'dist/everything.js'
+          ],
           timestamp: true
         },
         dest: 'game.appcache',

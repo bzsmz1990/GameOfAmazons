@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Game Of The Amazons</title>
+  <title>Game of the Amazons</title>
   <meta name="description" content="Game of the Amazons">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -16,12 +16,78 @@
 
   <script src="dist/everything.min.js"></script>
 
+  <script>window.angularTranslationLanguages = ['en', 'zh'];</script>
+
   <script src="http://yoav-zibin.github.io/emulator/dist/turnBasedServices.2.min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="http://yoav-zibin.github.io/emulator/main.css">
   <link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body ng-cloak ng-controller="Ctrl">
+
+  <div style="position:absolute; bottom:5px; left: 5px">
+    <span ng-click="isHelpModalShown = true"
+        class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+  </div>
+
+  <div class="overlayModal" ng-show="isHelpModalShown" aria-hidden="true">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="isHelpModalShown = false" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">
+            {{ 'RULES_OF_AMAZONS' | translate }}
+          </h4>
+        </div>
+        <div class="modal-body">
+          <carousel style="height: 150px">
+            <slide>
+              <table>
+                <tr>
+                  <td>
+                    {{ 'RULES_SLIDE0' | translate }}
+                  </td>
+                  <td>
+                    <img src="imgs/HelpSlide0.png" style="height:100px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table>
+                <tr>
+                  <td>
+                    {{ 'RULES_SLIDE1' | translate }}
+                  </td>
+                  <td>
+                    <img src="imgs/HelpSlide1.png" style="height:100px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table>
+                <tr>
+                  <td>
+                  {{ 'RULES_SLIDE2' | translate }}
+                  </td>
+                  <td>
+                    <img src="imgs/HelpSlide2.png" style="height:100px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+          </carousel>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="isHelpModalShown = false">
+            {{ 'CLOSE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div id="gameArea" ng-class='{table:true}'>
   <svg id="{{'pieceX_drag'}}" width="10%" height="10%"

@@ -694,6 +694,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
       // Center point in gameArea
       var x = clientX - gameArea.offsetLeft;
       var y = clientY - gameArea.offsetTop;
+      var moveType = $scope.typeExpected;
 
       // Is outside gameArea?
       if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
@@ -702,9 +703,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
         }
           // Drag the piece where the touch is (without snapping to a square).
         var size = getSquareWidthHeight();
-        setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2}, $scope.typeExpected);
+        setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2}, moveType);
         if (type === "touchend"){
-          if ($scope.typeExpected === 'X') {
+          if (moveType === 'X') {
             draggingPiece.style.display = 'none';
           }
         }
@@ -714,14 +715,14 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
         var row = Math.floor(NUM * y / gameArea.clientHeight);
 
         if (type === "touchstart" && !draggingStartedRowCol) {
-          if ($scope.board[row][col] === $scope.typeExpected && $scope.isYourTurn && $scope.typeExpected !== 'X') {
+          if ($scope.board[row][col] === moveType && $scope.isYourTurn && moveType !== 'X') {
             draggingStartedRowCol = {row: row, col: col};
-            draggingPiece = document.getElementById("piece"+$scope.typeExpected+"_"+row+"x"+col);
+            draggingPiece = document.getElementById("piece"+moveType+"_"+row+"x"+col);
             draggingPiece.style['z-index'] = ++nextZIndex;
-          }else if ($scope.isYourTurn && $scope.typeExpected === 'X') {
+          }else if ($scope.isYourTurn && moveType === 'X') {
               draggingStartedRowCol = pawnDelta;
               draggingPiece = document.getElementById("pieceX_drag");
-              setDraggingPieceTopLeft(getSquareTopLeft(row, col), $scope.typeExpected);
+              setDraggingPieceTopLeft(getSquareTopLeft(row, col), moveType);
               draggingPiece.style['z-index'] = ++nextZIndex;
               draggingPiece.style.display = 'inline';
            }
@@ -735,7 +736,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
           var topos = {row: row, col: col};
           dragDone(frompos, topos);
         } else {
-            setDraggingPieceTopLeft(getSquareTopLeft(row, col), $scope.typeExpected);
+            setDraggingPieceTopLeft(getSquareTopLeft(row, col), moveType);
         }
       }
 
@@ -743,9 +744,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
           type === "touchcancel" || type === "touchleave") {
         // drag ended
         // return the piece to it's original style (then angular will take care to hide it).
-        setDraggingPieceTopLeft(getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col), $scope.typeExpected);
+        setDraggingPieceTopLeft(getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col), moveType);
 
-        if (type !== 'touchend' && $scope.typeExpected === 'X') {
+        if (moveType === $scope.typeExpected && $scope.typeExpected === 'X') {
           draggingPiece.style.display = 'none';
         }
         draggingStartedRowCol = null;
@@ -755,26 +756,31 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic', functi
 
     }
     dragAndDropService.addDragListener("gameArea", handleDragEvent);
-
+/*
     function isInvalidPos(topLeft) {
       var size = getSquareWidthHeight();
       var row = Math.floor(topLeft.top / size.height);
       var col = Math.floor(topLeft.left / size.width);
       return row >= 0 && row <= 9 && col >= 0 && col <= 9 && $scope.board[row][col] !== '';
     }
-
+*/
     function setDraggingPieceTopLeft(topLeft, mType) {
       var originalSize;
-      var row = draggingStartedRowCol.row;
-      var col = draggingStartedRowCol.col;
-
+/*
       if (isInvalidPos(topLeft)) {
+        $log.info([topLeft]);
         return;
       }
-
-      originalSize = mType !== 'X' ? getSquareTopLeft(row, col) : getSquareTopLeft(0, 0);
-      draggingPiece.style.left = topLeft.left - originalSize.left + 'px';
-      draggingPiece.style.top = topLeft.top - originalSize.top + 'px';
+*/
+      if (mType === 'X') {
+        originalSize = getSquareTopLeft(0, 0);
+        draggingPiece.style.left = (topLeft.left - originalSize.left) + 'px';
+        draggingPiece.style.top = (topLeft.top - originalSize.top) + 'px';
+      } else {
+        originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
+        draggingPiece.style.left = (topLeft.left - originalSize.left) + 'px';
+        draggingPiece.style.top = (topLeft.top - originalSize.top) + 'px';
+      }
     }
 
     function getSquareWidthHeight() {

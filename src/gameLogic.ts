@@ -12,12 +12,12 @@ interface IDelta {
   col: number;
 }
 
-interface IDelList {
-  "1": IDelta[];
-  "2": IDelta[];
-  "3": IDelta[];
-  "4": IDelta[];
-}
+// interface IDelList {
+//   "1": IDelta[];
+//   "2": IDelta[];
+//   "3": IDelta[];
+//   "4": IDelta[];
+// }
 
 interface IState {
   board?: Board;
@@ -570,11 +570,14 @@ module gameLogic {
     var temp: IDelta = angular.fromJson(stateBeforeMove);
     stateBeforeMove = temp;
     var pawnPosList: IDelta[] = [];
-    var pawnDelList: any;
-    pawnDelList["1"] = []
-    pawnDelList["2"] = []
-    pawnDelList["3"] = []
-    pawnDelList["4"] = []
+    var pawnDelList: IDelta[][] = new Array();
+    for(var k = 1; k <= 4; k++) {
+      pawnDelList[k] = [];
+    }
+    // pawnDelList["1"] = []
+    // pawnDelList["2"] = []
+    // pawnDelList["3"] = []
+    // pawnDelList["4"] = []
     var pawnPosition: IDelta;
     var pawnDelta: IDelta;
     var i: number;
@@ -605,8 +608,8 @@ module gameLogic {
       for (j = pos.col + 1; j < 10; j += 1) {
         if (board[pos.row][j] === '') {
           temp = { row: pos.row, col: j };
-          var str_index = index.toString()
-          pawnDelList[str_index].push(temp);
+          // var str_index = index.toString()
+          pawnDelList[index].push(temp);
         } //East
         else { break; }
       }

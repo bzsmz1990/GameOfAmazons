@@ -559,11 +559,14 @@ var gameLogic;
         var temp = angular.fromJson(stateBeforeMove);
         stateBeforeMove = temp;
         var pawnPosList = [];
-        var pawnDelList;
-        pawnDelList["1"] = [];
-        pawnDelList["2"] = [];
-        pawnDelList["3"] = [];
-        pawnDelList["4"] = [];
+        var pawnDelList = new Array();
+        for (var k = 1; k <= 4; k++) {
+            pawnDelList[k] = [];
+        }
+        // pawnDelList["1"] = []
+        // pawnDelList["2"] = []
+        // pawnDelList["3"] = []
+        // pawnDelList["4"] = []
         var pawnPosition;
         var pawnDelta;
         var i;
@@ -591,8 +594,8 @@ var gameLogic;
             for (j = pos.col + 1; j < 10; j += 1) {
                 if (board[pos.row][j] === '') {
                     temp = { row: pos.row, col: j };
-                    var str_index = index.toString();
-                    pawnDelList[str_index].push(temp);
+                    // var str_index = index.toString()
+                    pawnDelList[index].push(temp);
                 } //East
                 else {
                     break;

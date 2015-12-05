@@ -1,3 +1,3 @@
 # GameOfAmazons
 Original version by Prakhar Verma.
-Revised by Hui Yang.
+Revised by Chen Chen.
